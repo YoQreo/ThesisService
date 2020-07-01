@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\Thesis;
+use App\Models\ThesisCopy;
 use Illuminate\Database\Seeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +14,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call('UsersTableSeeder');
+        factory(Thesis::class,40)->create();
+        factory(ThesisCopy::class,70)->create();
+        $this->call('AuthorsTableSeeder');
     }
 }

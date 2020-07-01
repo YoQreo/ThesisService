@@ -11,9 +11,12 @@
 |
 */
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\ThesisCopy::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->email,
+        'incomeNumber' => $faker->numberBetween(1,20),
+        'barcode' => $faker->randomNumber($nbDigits = 6, $strict = true),
+        'copy' => $faker->numberBetween(1,20),
+        'status' => $faker->randomElement(['Prestado','En Espera','Deshabilitado','Disponible']),
+        'thesis_id' => $faker->numberBetween(1,40),
     ];
 });
