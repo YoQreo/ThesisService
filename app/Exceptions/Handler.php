@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use DB;
 
 class Handler extends ExceptionHandler
 {
@@ -49,37 +50,38 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-       if($exception instanceof HttpException){
-           $code = $exception->getStatusCode();
-           $message = Response::$statusTexts[$code];
+        DB::rollback();
+        if($exception instanceof HttpException){
+            $code = $exception->getStatusCode();
+            $message = Response::$statusTexts[$code];
 
-           return $this->errorResponse($message,$code,null);
-
-       }
-
-       if($exception instanceof ModelNotFoundException){
-           $model =strtolower(class_basename($exception->getModel()));
-
-           return $this->errorResponse('The specified resource was not found',
-           Response::HTTP_NOT_FOUND, null);
+            return $this->errorResponse($message,$code,null);
 
         }
 
-       if($exception instanceof AuthorizationException){
-            
+        if($exception instanceof ModelNotFoundException){
+            $model =strtolower(class_basename($exception->getModel()));
+
+            return $this->errorResponse('The specified resource was not found',
+            Response::HTTP_NOT_FOUND, null);
+
+        }
+
+        if($exception instanceof AuthorizationException){
+                
             return $this->errorResponse('You have no permission to access',
-            Response::HTTP_FORBIDDEN, null);
- 
+             Response::HTTP_FORBIDDEN, null);
+    
         }
 
-       if($exception instanceof AuthenticationException){
-            
+        if($exception instanceof AuthenticationException){
+                
             return $this->errorResponse($exception->getMessage(),
             Response::HTTP_UNAUTHORIZED, null);
- 
+    
         }
 
-       if($exception instanceof ValidationException){
+        if($exception instanceof ValidationException){
             $errors = $exception->validator->errors()->getMessages();
 
             return $this->errorResponse($errors,
@@ -87,7 +89,7 @@ class Handler extends ExceptionHandler
  
         }
 
-       if(env('APP_DEBUG',false)){
+        if(env('APP_DEBUG',false)){
             return parent::render($request, $exception);
         }
 

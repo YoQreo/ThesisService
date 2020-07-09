@@ -54,6 +54,8 @@ class ThesisController extends Controller {
 		];
 		
 		$this->validate($request, $rules);
+
+		DB::beginTransaction();
 		$thesis = Thesis::create($request->all());
 
 		$authors = collect($request->authors)->map(function ($author) use ($thesis) {
@@ -63,13 +65,15 @@ class ThesisController extends Controller {
 				return $author;
 			}
 		});
-		$thesis['authors']=$authors;
-
+		
 		$copies = collect($request->copies)->map(function ($copy) use ($thesis) {
 			$copy = ThesisCopy::create($copy);
 			$thesis->copies()->save($copy);
 			return $copy;
 		});
+		DB::commit();
+
+		$thesis['authors']=$authors;
 		$thesis['copies']=$copies;
 
 		return $this->successResponse($thesis, Response::HTTP_CREATED, 'S004');
