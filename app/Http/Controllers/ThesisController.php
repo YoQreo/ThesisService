@@ -42,7 +42,7 @@ class ThesisController extends Controller {
 			'recomendations' => 'string|max:200',
 			'conclusions' => 'string|max:200',
 			'bibliography' => 'string|max:200',
-			'keywords' => 'string|max:20',
+			'keywords' => 'string|max:200',
 			'mention' => 'string|required|in:bachiller,titulo,maestria,doctorado',
 			'authors' => 'required',
 			'authors.*.author_id' => 'integer|required|min:1',

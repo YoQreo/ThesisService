@@ -13,8 +13,8 @@
 
 $factory->define(App\Models\ThesisCopy::class, function (Faker\Generator $faker) {
     return [
-        'incomeNumber' => $faker->numberBetween(1,20),
-        'barcode' => $faker->randomNumber($nbDigits = 6, $strict = true),
+        'incomeNumber' => (string)$faker->numberBetween(1,20),
+        'barcode' => (string)$faker->randomNumber($nbDigits = 6, $strict = true),
         'copy' => $faker->numberBetween(1,20),
         'status' => $faker->randomElement(['Prestado','En Espera','Deshabilitado','Disponible']),
         'thesis_id' => $faker->numberBetween(1,40),
