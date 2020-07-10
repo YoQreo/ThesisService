@@ -19,6 +19,22 @@ class ThesisController extends Controller {
 	public function __construct() {
 		//
 	}
+
+	/**
+    * Function to get all thesis
+    * @return Illuminate\Http\Response
+    */
+    public function index(){
+		$theses = Thesis::all();
+		
+		foreach($theses as $thesis){
+			$authors = DB::table('thesis_authors')->where('thesis_id', '=', $thesis->id)->get();
+			$thesis['authors'] = $authors;
+		}  
+		
+        return $this->successResponse($theses, Response::HTTP_OK, 'S002');
+	}
+	
 	/**
 	 *
 	 * Create an instance of Thesis
