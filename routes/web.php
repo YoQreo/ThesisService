@@ -12,3 +12,4 @@
  */
 
 $router->post('/thesis', ['as' => 'createThesis', 'uses' => 'ThesisController@store']);
+$router->get('/thesis', ['as' => 'showAllThesis', 'uses' => 'ThesisController@index']);
