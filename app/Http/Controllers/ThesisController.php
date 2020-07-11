@@ -28,10 +28,9 @@ class ThesisController extends Controller {
 		$rules = [
 			'type' => 'integer|required|in:1,2',
 			'clasification' => 'string|required|max:15',
-			'title' => 'string|required|max:50',
+			'title' => 'string|required|max:200',
 			'year' => 'string|required|date_format:Y',
 			'school_id' => 'integer|min:1',
-			'editorial_id' => 'integer|min:1',
 			'stand_id' => 'integer|min:1',
 			'adviser' => 'string|max:50',
 			'extension' => 'string|required|max:5',
@@ -46,7 +45,6 @@ class ThesisController extends Controller {
 			'mention' => 'string|required|in:bachiller,titulo,maestria,doctorado',
 			'authors' => 'required',
 			'authors.*.author_id' => 'integer|required|min:1',
-			'authors.*.type' => 'string|required|in:principal,secundario',
 			'copies.*.incomeNumber' => 'string|required|max:10',
 			'copies.*.barcode' => 'string|required|max:10',
 			'copies.*.copy' => 'integer|required|min:1',
@@ -59,7 +57,7 @@ class ThesisController extends Controller {
 		$thesis = Thesis::create($request->all());
 
 		$authors = collect($request->authors)->map(function ($author) use ($thesis) {
-			$validate = DB::table('thesis_authors')->insert(['thesis_id' => $thesis->id, 'author_id' => $author['author_id'], 'type' => $author['type']]);
+			$validate = DB::table('thesis_authors')->insert(['thesis_id' => $thesis->id, 'author_id' => $author['author_id']]);
 			if($validate){
 				$author = DB::table('thesis_authors')->orderBy('id', 'desc')->first();
 				return $author;

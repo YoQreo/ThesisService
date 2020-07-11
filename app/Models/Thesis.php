@@ -18,7 +18,6 @@ class Thesis extends Model
         'title',
         'year',
         'school_id',
-        'editorial_id',
         'stand_id',
         'adviser',
         'extension',

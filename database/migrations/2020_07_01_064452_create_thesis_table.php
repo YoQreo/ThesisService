@@ -20,7 +20,6 @@ class CreateThesisTable extends Migration
             $table->text('title');
             $table->string('year');
             $table->integer('school_id')->unsigned()->nullable();
-            $table->integer('editorial_id')->unsigned()->nullable();
             $table->integer('stand_id')->unsigned()->nullable();
             $table->string('adviser')->nullable();
             $table->string('extension');
