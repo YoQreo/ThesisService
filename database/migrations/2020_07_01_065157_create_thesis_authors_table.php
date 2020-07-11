@@ -18,7 +18,6 @@ class CreateThesisAuthorsTable extends Migration
             $table->integer('thesis_id')->unsigned()->nullable();
             $table->foreign('thesis_id')->references('id')->on('theses')->onDelete('cascade');
             $table->integer('author_id')->unsigned()->nullable();
-            $table->string('type');
             $table->timestamps();
         });
     }

@@ -29,8 +29,8 @@ class GetAllThesisTest extends TestCase
         factory('App\Models\ThesisCopy',2)->create(['thesis_id' => $thesis1->id]);
         factory('App\Models\ThesisCopy',2)->create(['thesis_id' => $thesis2->id]);
         DB::table('thesis_authors')->insert([
-            ['thesis_id' => $thesis1->id, 'author_id' => 1, 'type' => 'principal'],
-            ['thesis_id' => $thesis2->id, 'author_id' => 2, 'type' => 'principal']
+            ['thesis_id' => $thesis1->id, 'author_id' => 1],
+            ['thesis_id' => $thesis2->id, 'author_id' => 2]
         ]);
         //comprobar codigo de respuesta
         $this->get(route('showAllThesis'))
@@ -45,7 +45,6 @@ class GetAllThesisTest extends TestCase
                     'title',
                     'year',
                     'school_id',
-                    'editorial_id',
                     'stand_id',
                     'adviser',
                     'extension',

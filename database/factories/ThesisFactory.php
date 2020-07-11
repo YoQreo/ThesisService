@@ -18,7 +18,6 @@ $factory->define(App\Models\Thesis::class, function (Faker\Generator $faker) {
         'title' => $faker->sentence(5),
         'year' => (string)$faker->year($max = 'now'),
         'school_id' => $faker->numberBetween(1,50),
-        'editorial_id' => $faker->numberBetween(1,20),
         'stand_id' => $faker->numberBetween(1,10),
         'adviser' => $faker->name,
         'extension' => (string)$faker->numberBetween(100,300),
@@ -29,7 +28,7 @@ $factory->define(App\Models\Thesis::class, function (Faker\Generator $faker) {
         'recomendations' => $faker->text(200),
         'conclusions' => $faker->text(200),
         'bibliography' => $faker->text(200),
-        'keywords' => $faker->text(20),
+        'keywords' => $faker->text(200),
         'mention' => $faker->randomElement(['bachiller','titulo','maestria','doctorado']),
     ];
 });
