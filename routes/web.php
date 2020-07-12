@@ -13,3 +13,4 @@
 
 $router->post('/thesis', ['as' => 'createThesis', 'uses' => 'ThesisController@store']);
 $router->get('/thesis', ['as' => 'showAllThesis', 'uses' => 'ThesisController@index']);
+$router->delete('/thesis/{id}', ['as' => 'deleteThesis', 'uses' => 'ThesisController@destroy']);
