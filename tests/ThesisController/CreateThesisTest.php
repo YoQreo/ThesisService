@@ -889,31 +889,6 @@ class CreateThesisTest extends TestCase
     /**
     * @test 
     * @author Gutierrez Villanueva Katty Susana
-    * @testdox Test para la creación de tesis cuando se envía el campo mention
-    * con un valor diferente a bachiller, titulo, maestria, doctorado
-    */
-    public function invalid_create_of_thesis_with_value_incorrect_in_mention(){
-        // Creamos una tesis con un valor inválido en mention
-        $thesis = factory('App\Models\Thesis')->make(['mention' => 'abc']);
-        $author = [['author_id'=> 1], ['author_id'=> 2]];
-        $thesis['authors'] = $author;
-        $copy = [['incomeNumber' => '1','barcode' => '123','copy' => 1, 'status' => 'Prestado']];
-        $thesis['copies'] = $copy;
-        //comprobar codigo de respuesta
-        $this->post(route('createThesis'),$thesis->toArray())
-        ->assertResponseStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
-        //comprobar estructura de respuesta
-        $this->seeJsonStructure([
-            'error' =>[
-                'mention'
-            ],
-            'code',
-            'type'
-        ]);
-    }
-    /**
-    * @test 
-    * @author Gutierrez Villanueva Katty Susana
     * @testdox Test para la creación de tesis cuando se envía el campo copy_status
     * con un valor diferente a Prestado, En Espera, Deshabilitado, Disponible'
     */
