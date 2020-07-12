@@ -21,14 +21,14 @@ $factory->define(App\Models\Thesis::class, function (Faker\Generator $faker) {
         'stand_id' => $faker->numberBetween(1,10),
         'adviser' => $faker->name,
         'extension' => (string)$faker->numberBetween(100,300),
-        'observations' => $faker->sentence(5),
-        'accompaniment' => $faker->sentence(5),
+        'observations' => $faker->text(50),
+        'accompaniment' => $faker->text(50),
         'content' => $faker->text(200),
         'summary' => $faker->text(200),
         'recomendations' => $faker->text(200),
         'conclusions' => $faker->text(200),
         'bibliography' => $faker->text(200),
         'keywords' => $faker->text(200),
-        'mention' => $faker->randomElement(['bachiller','titulo','maestria','doctorado']),
+        'mention' => $faker->word(),
     ];
 });
