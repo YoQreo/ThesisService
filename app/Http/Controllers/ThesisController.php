@@ -92,4 +92,29 @@ class ThesisController extends Controller {
 
 		return $this->successResponse($thesis, Response::HTTP_CREATED, 'S004');
 	}
+	
+	/**
+     * Removes an existing Thesis
+     *
+     * @return  Illuminate\Http\Response
+     */
+	public function destroy($id){
+		$thesis = Thesis::findOrFail($id);
+		$copies = ThesisCopy::where("thesis_id",$id)->where("status","Prestado")->first();
+		
+		if(!empty($copies))
+			return $this->errorResponse("There are copies in borrowed status",Response::HTTP_UNPROCESSABLE_ENTITY,'E003');
+		
+		$thesis -> delete();
+		
+		$thesis_response = [
+			'id' => $thesis->id,
+			'type' => $thesis->type,
+			'clasification' => $thesis->clasification, 
+			'title' => $thesis->title
+		];
+
+        return $this->successResponse($thesis_response, Response::HTTP_OK, 'S003');
+
+    }
 }
