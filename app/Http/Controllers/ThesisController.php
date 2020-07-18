@@ -92,6 +92,80 @@ class ThesisController extends Controller {
 
 		return $this->successResponse($thesis, Response::HTTP_CREATED, 'S004');
 	}
+
+	/**
+     * Update the information of an existing Thesis
+     *
+     * @return  Illuminate\Http\Response
+     */
+
+    public function update(Request $request, $id){
+
+		$thesis = Thesis::findOrFail($id);
+
+        $rules = [
+            'type' => 'integer|in:1,2',
+			'clasification' => 'string|max:15',
+			'title' => 'string|max:200',
+			'year' => 'string|date_format:Y',
+			'school_id' => 'integer|min:1',
+			'stand_id' => 'integer|min:1',
+			'adviser' => 'string|max:50',
+			'extension' => 'string|max:5',
+			'observations' => 'string|max:50',
+			'accompaniment' => 'string|max:50',
+			'content' => 'string|max:200',
+			'summary' => 'string|max:200',
+			'recomendations' => 'string|max:200',
+			'conclusions' => 'string|max:200',
+			'bibliography' => 'string|max:200',
+			'keywords' => 'string|max:200',
+			'mention' => 'string|max:50',
+			'authors.*.author_id' => 'integer|min:1',
+        ];
+        
+        $this->validate($request,$rules);
+
+		$thesis->fill($request->all());
+
+		$authors_id = DB::table('thesis_authors')->select('author_id')->where('thesis_id', $thesis->id)->get();
+		$authors_id1 = collect($request->authors)->map(function ($author) { 
+			return ($author['author_id']); 
+		})->toArray();
+		$authors_id2 = collect($authors_id)->map(function ($author) { 
+			return ($author->author_id); 
+		})->toArray();
+		$validate = empty(array_diff($authors_id1, $authors_id2)) && empty(array_diff($authors_id2, $authors_id1));
+
+        if($thesis->isClean() && ($validate|| empty($request->authors))){
+            return $this->errorResponse('At least one value must change',
+            Response::HTTP_UNPROCESSABLE_ENTITY, 'E002');
+		}
+		
+		DB::beginTransaction();
+		$thesis->save();
+		
+		if(!($validate|| empty($request->authors))){
+			DB::table('thesis_authors')->where('thesis_id', $id)->delete();
+			$authors = collect($request->authors)->map(function ($author) use ($id) {
+				$validate = DB::table('thesis_authors')->insert(['thesis_id' => $id, 'author_id' => $author['author_id']]);
+				if($validate){
+					$author = DB::table('thesis_authors')->orderBy('id', 'desc')->first();
+					return $author;
+				}
+			});
+		}
+		else{
+			$authors = DB::table('thesis_authors')->where('thesis_id', $thesis->id)->get();
+		}	
+		
+		DB::commit();
+
+		$thesis['authors'] = $authors;
+
+        return $this->successResponse($thesis, Response::HTTP_CREATED, 'S005');
+
+    }
 	
 	/**
      * Removes an existing Thesis
